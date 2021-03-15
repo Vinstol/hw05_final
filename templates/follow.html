@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Ваши подписки{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        {% include "includes/menu.html" with follow=True %}
+        
+        <h1> Ваши подписки</h1>
+        <!-- Вывод ленты записей -->
+        {% if followers_cnt > 0 %}
+            {% load cache %}
+            {% cache 20 index_page page %}
+                {% for post in page %}
+                    {% include "includes/post_item.html" with post=post %}
+                {% endfor %}
+            {% endcache %}
+        {% else %}
+            <div style="font-size: 16pt; align-self: center;">У Вас пока что нет подписок!
+            <a href="{% url 'index' %}">Предлагаем ознакомиться с постами зарегистрированных авторов...</a></div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+        {% endif %}
+    </div>
+
+    <!-- Вывод паджинатора -->
+    {% if page.has_other_pages %}
+        {% include "includes/paginator.html" with items=page paginator=paginator%}
+    {% endif %}
+
+{% endblock %}

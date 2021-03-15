@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Профиль пользователя @{{author.username}}{% endblock %}
+{% block header %}{% endblock %}
+{% block content %}
+
+<h3 align='center'>Профиль пользователя:</h3>
+
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-3 mb-3 mt-1">
+            {% include "includes/card_author.html" %}
+        </div>
+        <div class="col-md-9">                
+
+        <div class="container">
+            <h4>Все посты:</h4>
+                <!-- Вывод ленты записей -->    
+                {% for post in page %}
+                    {% include "includes/post_item.html" with post=post %}
+                {% endfor %}
+         </div>
+
+    <!-- Вывод паджинатора -->
+    {% if page.has_other_pages %}
+        {% include "includes/paginator.html" with items=page paginator=paginator%}
+    {% endif %}
+
+{% endblock %}

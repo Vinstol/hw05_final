@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block header %}{% endblock %}
+{% block content %}
+{% load user_filters %}
+
+<h3 align='center'>The Last Social Media You'll Ever Need</h3>
+
+  <main role="main" class="container">
+    <div class="row">
+      <!-- Левый вспомогательный блок -->
+      <div class="col-md-4 mb-1 mt-1">
+        <div class="card">
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <div class="h6">
+                  Об авторе
+                </div> 
+              </li>
+              <li class="list-group-item">
+                <div class="h6 text-muted">
+                  Столяров В.В.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Тело страницы -->
+      <div class="col-md-8">
+        <div class="card-body">
+          <div class="card-text">
+            <p>Другие работы автора:</p>
+            <p><a href="https://github.com/Vinstol">GitHub</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}

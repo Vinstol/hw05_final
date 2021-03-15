@@ -1,0 +1,15 @@
+<!-- Комментарии -->
+<h7>Комментарии:</h7>
+{% for item in comments %}
+<div class="media card mb-4">
+    <div class="media-body card-body">
+        <h6 class="mt-0">
+            <a href="{% url 'profile' item.author.username %}"
+               name="comment_{{ item.id }}">
+                {{ item.author.username }}
+            </a>
+        </h6>
+        <p>{{ item.text | linebreaksbr }}</p>
+    </div>
+</div>
+{% endfor %}

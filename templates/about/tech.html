@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}О используемых технологиях{% endblock %}
+{% block header %}{% endblock %}
+{% block content %}
+{% load user_filters %}
+
+<h3 align='center'>The Last Social Media You'll Ever Need</h3>
+
+  <main role="main" class="container">
+    <div class="row">
+      <!-- Левый вспомогательный блок -->
+      <div class="col-md-4 mb-1 mt-1">
+        <div class="card">
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <div class="h6">
+                  О технологиях
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="h6 text-muted">
+                    <ul>
+                        <li><a href="https://www.python.org/downloads/release/python-379/">Python 3.7.9</a></li>
+                        <li><a href="https://docs.djangoproject.com/en/3.1/releases/2.2.6/">Django 2.2.6</a></li> 
+                    </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Тело страницы -->
+      <div class="col-md-8">
+        <div class="card-body">
+          <div class="card-text">
+            <p><a href="https://www.python.org/">Официальная документация Python</a></p>
+            <p><a href="https://www.djangoproject.com/">Официальная документация Django</a></p>
+          </div>
+        </div>
+    </div>
+    </div>
+  </main>
+{% endblock %}
