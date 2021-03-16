@@ -17,18 +17,8 @@ from django.urls import reverse
 from posts.models import Group
 from posts.models import Post
 
-# from yatube.settings import BASE_DIR
-# from yatube.settings import MEDIA_ROOT
-
-# settings.MEDIA_ROOT = tempfile.mkdtemp(
-# prefix='pages_',
-# dir=settings.BASE_DIR
-# )
-
 
 @override_settings()
-# @override_settings(ROOT_URLCONF=settings.MEDIA_ROOT)
-# @override_settings(MEDIA_ROOT=settings.MEDIA_ROOT)
 class PostFormTests(TestCase):
     @classmethod
     def setUpClass(cls):

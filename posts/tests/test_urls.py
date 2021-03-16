@@ -79,6 +79,16 @@ class PostModelTest(TestCase):
             self.post.author,
             self.post.id
         )
+        self.comment_page = '/{0}/{1}/comment/'.format(
+            self.post.author,
+            self.post.id
+        )
+        self.profle_follow_button = '/{0}/follow/'.format(
+            self.post.author
+        )
+        self.profle_unfollow_button = '/{0}/unfollow/'.format(
+            self.post.author
+        )
 
     # Проверяем общедоступные страницы
     def test_index_url_exists_at_desired_location_anonymous(self):
@@ -126,6 +136,11 @@ class PostModelTest(TestCase):
         response = self.authorized_client.get(NEW_POST_PAGE)
         self.assertEqual(response.status_code, 200)
 
+    def test_url_add_comment_exists_at_desired_location_logged_user(self):
+        """Страница созд. комментария доступна авторизованному пользователю."""
+        response = self.authorized_client.get(self.comment_page)
+        self.assertEqual(response.status_code, 200)
+
     # Проверяем редиректы для неавторизованного пользователя
     def test_url_new_redirect_anonymous_on_login(self):
         """Страница создания нового поста (/new/) перенаправит
@@ -144,6 +159,36 @@ class PostModelTest(TestCase):
                 self.post.author,
                 self.post.id
             ))
+        )
+    
+    def test_comment_url_redirect_anonymous_on_login(self):
+        """Страница создания комментария поста (username/post_id/comment/)
+        перенаправит анонимного пользователя на страницу логина."""
+        response = self.client.get(self.comment_page, follow=True)
+        self.assertRedirects(
+            response,
+            ('/auth/login/?next=/{0}/{1}/comment/'.format(
+                self.post.author,
+                self.post.id
+            ))
+        )
+    
+    def test_profile_follow_url_redirect_anonymous_on_login(self):
+        """Кнопка «Подписаться» (username/post_id/comment/)
+        перенаправит анонимного пользователя на страницу логина."""
+        response = self.client.get(self.profle_follow_button, follow=True)
+        self.assertRedirects(
+            response,
+            ('/auth/login/?next=/{0}/follow/'.format(self.post.author))
+        )
+    
+    def test_profile_unfollow_url_redirect_anonymous_on_login(self):
+        """Кнопка «Отписаться» (username/post_id/comment/)
+        перенаправит анонимного пользователя на страницу логина."""
+        response = self.client.get(self.profle_unfollow_button, follow=True)
+        self.assertRedirects(
+            response,
+            ('/auth/login/?next=/{0}/unfollow/'.format(self.post.author))
         )
 
     # Проверяем редирект для авторизованного пользователя, не автора поста

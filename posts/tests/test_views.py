@@ -17,7 +17,7 @@ from django.test import TestCase
 
 from django.urls import reverse
 
-from posts.models import Group
+from posts.models import Follow, Group
 from posts.models import Post
 
 from yatube.settings import POSTS_LIMIT
@@ -256,7 +256,7 @@ class PostPagesTest(TestCase):
 
     # Проверка кэширования стартовой страницы
     def test_cached_index_page(self):
-        """Стартовая страниц сохранена в кэше."""
+        """Стартовая страница сохранена в кэше."""
         cached_response_1 = self.authorized_client_1.get(reverse('index'))
        
         Post.objects.filter(id=self.test_post.id).delete()
@@ -269,3 +269,57 @@ class PostPagesTest(TestCase):
             cached_response_1.content,
             cached_response_3.content
         )
+
+    # Проверка работоcпособности подписки/отписки
+    def test_follow(self):
+        """При подписке создается соответствующая запись в БД."""
+        self.authorized_client_1.get(reverse(
+            'profile_follow',
+            kwargs={'username': self.user_2}
+        ))
+        follow_exists = Follow.objects.filter(
+            user=self.user_1,
+            author=self.user_2
+        ).exists()
+        self.assertTrue(follow_exists)
+
+    def test_unfollow(self):
+        """При отписке удаляется соответствующая запись в БД."""
+        self.authorized_client_1.get(reverse(
+            'profile_follow',
+            kwargs={'username': self.user_2}
+        ))
+        self.authorized_client_1.get(reverse(
+            'profile_unfollow',
+            kwargs={'username': self.user_2}
+        ))
+        follow_exists = Follow.objects.filter(
+            user=self.user_1,
+            author=self.user_2
+        ).exists()
+        self.assertFalse(follow_exists)
+
+    def test_follow_index_page_display_followed_author_post(self):
+        """В ленте подписок появляются посты соответствующих авторов"""
+        kat_post = Post.objects.create(
+            text='Сообщение Катамаранова',
+            pub_date='2019-12-19',
+            author=self.user_2,
+            group=self.ok_group,
+        )
+        # 'Katamaranov' подписан на 'Polzovatel'
+        self.authorized_client_2.get(reverse(
+            'profile_follow',
+            kwargs={'username': self.user_1}
+        ))
+        # Пост автора 'Polzovatel' появляется в ленте подписок у 'Katamaranov'
+        response = self.authorized_client_2.get(reverse('follow_index'))
+        follow_index_page_view_1 = response.context.get('page')
+        self.assertIn(self.test_post, follow_index_page_view_1)
+
+        # 'Polzovatel' НЕ подписан на 'Katamaranov'
+        # Пост автора 'Katamaranov' НЕ появится в ленте подписок у 'Polzovatel'
+        response = self.authorized_client_1.get(reverse('follow_index'))
+        follow_index_page_view_2 = response.context.get('page')
+        self.assertNotIn(kat_post, follow_index_page_view_2)
+    
