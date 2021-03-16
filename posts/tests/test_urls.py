@@ -181,7 +181,7 @@ class PostModelTest(TestCase):
             response,
             ('/auth/login/?next=/{0}/follow/'.format(self.post.author))
         )
-    
+
     def test_profile_unfollow_url_redirect_anonymous_on_login(self):
         """Кнопка «Отписаться» (username/post_id/comment/)
         перенаправит анонимного пользователя на страницу логина."""
