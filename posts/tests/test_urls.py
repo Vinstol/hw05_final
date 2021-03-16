@@ -160,7 +160,7 @@ class PostModelTest(TestCase):
                 self.post.id
             ))
         )
-    
+
     def test_comment_url_redirect_anonymous_on_login(self):
         """Страница создания комментария поста (username/post_id/comment/)
         перенаправит анонимного пользователя на страницу логина."""
@@ -172,7 +172,7 @@ class PostModelTest(TestCase):
                 self.post.id
             ))
         )
-    
+
     def test_profile_follow_url_redirect_anonymous_on_login(self):
         """Кнопка «Подписаться» (username/post_id/comment/)
         перенаправит анонимного пользователя на страницу логина."""

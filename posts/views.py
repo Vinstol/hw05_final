@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model
 
 from django.contrib.auth.decorators import login_required
 
@@ -8,12 +8,9 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
 
-from django.views.decorators.cache import cache_page
-
 from posts.forms import CommentForm
 from posts.forms import PostForm
 
-from posts.models import Comment
 from posts.models import Follow
 from posts.models import Group
 from posts.models import Post
@@ -52,7 +49,6 @@ def group_post(request, slug):
 @login_required
 def new_post(request):
     form = PostForm(request.POST or None, files=request.FILES or None)
-    # if request.method == 'POST':
     if form.is_valid():
         post = form.save(commit=False)
         post.author = request.user

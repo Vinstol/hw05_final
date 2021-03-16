@@ -51,7 +51,7 @@ class PostPagesTest(TestCase):
             author=cls.test_user,
             group=cls.ok_group
         )
-        
+
     @classmethod
     def tearDownClass(cls):
         shutil.rmtree(settings.MEDIA_ROOT, ignore_errors=True)
@@ -258,7 +258,7 @@ class PostPagesTest(TestCase):
     def test_cached_index_page(self):
         """Стартовая страница сохранена в кэше."""
         cached_response_1 = self.authorized_client_1.get(reverse('index'))
-       
+
         Post.objects.filter(id=self.test_post.id).delete()
         cached_response_2 = self.authorized_client_1.get(reverse('index'))
         self.assertEqual(cached_response_1.content, cached_response_2.content)
@@ -322,4 +322,3 @@ class PostPagesTest(TestCase):
         response = self.authorized_client_1.get(reverse('follow_index'))
         follow_index_page_view_2 = response.context.get('page')
         self.assertNotIn(kat_post, follow_index_page_view_2)
-    
