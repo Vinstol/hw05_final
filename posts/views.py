@@ -79,28 +79,16 @@ def profile(request, username):
     paginator = Paginator(posts, POSTS_LIMIT)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    posts_cnt = len(posts)
-    followers_cnt = len(user.follower.all())
-    followings_cnt = len(user.following.all())
     if request.user.is_authenticated is True:
-        context = {
-            'page': page,
-            'author': user,
-            'posts_cnt': posts_cnt,
-            'followers_cnt': followers_cnt,
-            'followings_cnt': followings_cnt,
-            'following': Follow.objects.filter(user=request.user, author=user),
-            'paginator': paginator,
-        }
+        following = Follow.objects.filter(user=request.user, author=user)
     else:
-        context = {
-            'page': page,
-            'author': user,
-            'posts_cnt': posts_cnt,
-            'followers_cnt': followers_cnt,
-            'followings_cnt': followings_cnt,
-            'paginator': paginator,
-        }
+        following = None
+    context = {
+        'page': page,
+        'author': user,
+        'following': following,
+        'paginator': paginator,
+    }
     return render(request, 'profile.html', context)
 
 
@@ -108,31 +96,18 @@ def post_view(request, username, post_id):
     user = get_object_or_404(User, username=username)
     post = get_object_or_404(Post, author__username=username, id=post_id)
     comments_under_post = post.comments.all()
-    posts_cnt = len(user.posts.all())
     form = CommentForm(request or None)
-    followers_cnt = len(user.follower.all())
-    followings_cnt = len(user.following.all())
     if request.user.is_authenticated is True:
-        context = {
-            'post': post,
-            'comments': comments_under_post,
-            'author': post.author,
-            'posts_cnt': posts_cnt,
-            'followers_cnt': followers_cnt,
-            'followings_cnt': followings_cnt,
-            'following': Follow.objects.filter(user=request.user, author=user),
-            'form': form,
-        }
+        following = Follow.objects.filter(user=request.user, author=user)
     else:
-        context = {
-            'post': post,
-            'comments': comments_under_post,
-            'author': post.author,
-            'posts_cnt': posts_cnt,
-            'followers_cnt': followers_cnt,
-            'followings_cnt': followings_cnt,
-            'form': form,
-        }
+        following = None
+    context = {
+        'post': post,
+        'comments': comments_under_post,
+        'author': post.author,
+        'following': following,
+        'form': form,
+    }
     return render(request, 'post.html', context)
 
 
@@ -167,7 +142,7 @@ def follow_index(request):
     paginator = Paginator(post_list, POSTS_LIMIT)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    followers_cnt = len(request.user.follower.all())
+    followers_cnt = request.user.follower.all().count()
     return render(request, 'follow.html', {
         'page': page,
         'followers_cnt': followers_cnt,

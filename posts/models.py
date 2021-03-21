@@ -106,6 +106,12 @@ class Follow(models.Model):
     )
 
     class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'author'],
+                name='unigue_subscriber'
+            ),
+        ]
         ordering = ['-author']
 
     def __str__(self):

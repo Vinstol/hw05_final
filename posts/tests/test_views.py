@@ -17,7 +17,8 @@ from django.test import TestCase
 
 from django.urls import reverse
 
-from posts.models import Follow, Group
+from posts.models import Follow
+from posts.models import Group
 from posts.models import Post
 
 from yatube.settings import POSTS_LIMIT
@@ -139,11 +140,9 @@ class PostPagesTest(TestCase):
 
         test_profile_posts = response.context.get('page')[0].text
         test_profile_group = response.context.get('page')[0].group.title
-        test_profile_posts_cnt = response.context.get('posts_cnt')
 
         self.assertEqual(test_profile_posts, 'Тестовое сообщение!!!')
         self.assertEqual(test_profile_group, 'Правильная тестовая группа')
-        self.assertEqual(test_profile_posts_cnt, 1)
 
     def test_post_view_show_correct_context(self):
         """View-функция страницы поста передает правильный контекст."""
@@ -308,10 +307,8 @@ class PostPagesTest(TestCase):
             group=self.ok_group,
         )
         # 'Katamaranov' подписан на 'Polzovatel'
-        self.authorized_client_2.get(reverse(
-            'profile_follow',
-            kwargs={'username': self.user_1}
-        ))
+        Follow.objects.get_or_create(user=self.user_2, author=self.user_1)
+
         # Пост автора 'Polzovatel' появляется в ленте подписок у 'Katamaranov'
         response = self.authorized_client_2.get(reverse('follow_index'))
         follow_index_page_view_1 = response.context.get('page')

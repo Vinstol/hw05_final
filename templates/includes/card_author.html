@@ -10,34 +10,35 @@
     <ul class="list-group list-group-flush">
             <li class="list-group-item">
                 <div class="h7 text-muted">
-                    Подписчиков:<br>{{ followings_cnt }}<br>
-                    Подписан:<br>{{ followers_cnt }}
+                    
+                    Подписчиков:<br>{{ author.following.count }}<br>
+                    Подписан:<br>{{ author.follower.count }}
                 </div>
             </li>
             <li class="list-group-item">
                     <div class="h7 text-muted">
-                        Записей: {{ posts_cnt }}
+                        Записей: {{ author.posts.count }}
                     </div>
             </li>
-            {% if request.user != author %}
-                <li class="list-group-item">
-                    {% if following %}
-                    <a class="btn btn-sm btn-light" 
-                        href="{% url 'profile_unfollow' author.username %}" 
-                        role="button" 
-                        style="font-size: 12pt; align-self: center;"> 
-                    Отписаться
-                    </a>
-                    {% else %}
-                    <a class="btn btn-sm btn-primary" 
-                        href="{% url 'profile_follow' author.username %}" 
-                        role="button" 
-                        style="font-size: 12pt; align-self: center;">
-                    Подписаться
-                    </a>
-                    {% endif %}
-                </li>
-            {% endif %}
+                {% if request.user != author and request.user.is_authenticated %}
+                    <li class="list-group-item">
+                        {% if following %}
+                        <a class="btn btn-sm btn-light" 
+                            href="{% url 'profile_unfollow' author.username %}" 
+                            role="button" 
+                            style="font-size: 12pt; align-self: center;"> 
+                        Отписаться
+                        </a>
+                        {% else %}
+                        <a class="btn btn-sm btn-primary" 
+                            href="{% url 'profile_follow' author.username %}" 
+                            role="button"
+                            style="font-size: 12pt; align-self: center;">
+                        Подписаться
+                        </a>
+                        {% endif %}
+                    </li>
+                {% endif %}
             </li>
     </ul>
 </div>
