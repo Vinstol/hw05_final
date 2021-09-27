@@ -82,6 +82,7 @@ class Comment(models.Model):
     created = models.DateTimeField(
         verbose_name='Дата и время публикации комментария',
         auto_now_add=True,
+        db_index=True,
     )
 
     class Meta:

@@ -21,9 +21,9 @@ from posts.models import Follow
 from posts.models import Group
 from posts.models import Post
 
-from yatube.settings import POSTS_LIMIT
+from yatube.settings import MEDIA_ROOT, POSTS_LIMIT
 
-
+@override_settings(MEDIA_ROOT='temp_media')
 class PostPagesTest(TestCase):
     ''' Создание экземпляров моделей Post и Group'''
     @classmethod

@@ -53,6 +53,6 @@ if settings.DEBUG:
         document_root=settings.STATIC_ROOT
     )
 
-    import debug_toolbar
+    # import debug_toolbar
 
-    urlpatterns += (path("__debug__/", include(debug_toolbar.urls)),) 
+    # urlpatterns += (path("__debug__/", include(debug_toolbar.urls)),)
